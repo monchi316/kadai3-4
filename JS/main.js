@@ -1,6 +1,9 @@
 'use strict'
 {
   // HTML要素の取得
+  const allBtn = document.getElementById('all');
+  const workingBtn = document.getElementById('working');
+  const completeBtn = document.getElementById('complete');
   const btn = document.getElementById('btn');
   const tasks = [];
   const taskForm = document.getElementById('taskForm');
@@ -12,9 +15,19 @@
       addTask();
     }
   });
-
   // ラジオボタン
-
+  //すべて
+  allBtn.addEventListener('click', () => {
+    all();
+  });
+  //作業中
+  workingBtn.addEventListener('click', () => {
+    working();
+  });
+  //完了
+  completeBtn.addEventListener('click', () => {
+    complete();
+  });
   // ↓関数定義↓
   // タスク追加時の処理内容
   const addTask = () => {
@@ -64,6 +77,8 @@
           statusNow(index);
           createTask();
         });
+        // ラジオボタン(すべて)にチェックを入れる
+        allBtn.checked = true;
       });
     };
     createTask();
@@ -81,6 +96,39 @@
       tasks[index].status = '完了';
     } else {
       tasks[index].status = '作業中';
+    }
+  }
+  //ラジオボタン(すべて)を選択した時の処理内容
+  const all = () => {
+    const workingTr = document.getElementsByClassName('working');
+    for (let i = 0; i < workingTr.length; i++) {
+      workingTr[i].classList.remove('workingNow');
+    }
+    const completeTr = document.getElementsByClassName('complete');
+    for (let i = 0; i < completeTr.length; i++) {
+      completeTr[i].classList.remove('completeNow');
+    }
+  }
+  //ラジオボタン(作業中)を選択した時の処理内容
+  const working = () => {
+    const completeTr = document.getElementsByClassName('complete');
+    for (let i = 0; i < completeTr.length; i++) {
+      completeTr[i].classList.add('completeNow');
+    }
+    const workingTr = document.getElementsByClassName('working');
+    for (let i = 0; i < workingTr.length; i++) {
+      workingTr[i].classList.remove('workingNow');
+    }
+  }
+  //ラジオボタン(完了)を選択した時の処理内容
+  const complete = () => {
+    const workingTr = document.getElementsByClassName('working');
+    for (let i = 0; i < workingTr.length; i++) {
+      workingTr[i].classList.add('workingNow');
+    }
+    const completeTr = document.getElementsByClassName('complete');
+    for (let i = 0; i < completeTr.length; i++) {
+      completeTr[i].classList.remove('completeNow');
     }
   }
 }
