@@ -1,6 +1,9 @@
 'use strict'
 {
   // HTML要素の取得
+  const allBtn = document.getElementById('all');
+  const workingBtn = document.getElementById('working');
+  const completeBtn = document.getElementById('complete');
   const btn = document.getElementById('btn');
   const tasks = [];
   const taskForm = document.getElementById('taskForm');
@@ -12,9 +15,6 @@
       addTask();
     }
   });
-
-  // ラジオボタン
-
   // ↓関数定義↓
   // タスク追加時の処理内容
   const addTask = () => {
@@ -45,9 +45,9 @@
         statusTd.appendChild(statusBtn);
         removeTd.appendChild(removeBtn);
         if (tasks[index].status === '作業中') {
-          tr.className = 'working';
+          tr.id = 'workingStatus';
         } else {
-          tr.className = 'complete';
+          tr.id = 'completeStatus';
         }
         tasks[index].idNumber = index;
         idTd.textContent = task.idNumber;
@@ -64,6 +64,21 @@
           statusNow(index);
           createTask();
         });
+        // ラジオボタン
+        //すべて
+        allBtn.addEventListener('click', () => {
+          createTask();
+        });
+        //作業中
+        workingBtn.addEventListener('click', () => {
+          createTask();
+          workingRadio();
+        });
+        //完了
+        completeBtn.addEventListener('click', () => {
+          createTask();
+          completeRadio();
+        });   
       });
     };
     createTask();
@@ -81,6 +96,25 @@
       tasks[index].status = '完了';
     } else {
       tasks[index].status = '作業中';
+    }
+  }
+  // ラジオボタン処理内容
+  //ラジオボタン(作業中)を選択した時の処理内容
+  const workingRadio = () => {
+    const completeList = tasks.filter((task) => {
+      return (task.status === '完了')
+    });
+    for (let i = 0; i < completeList.length; i++) {
+      document.getElementById('completeStatus').remove();
+    }
+  }
+  //ラジオボタン(完了)を選択した時の処理内容
+  const completeRadio = () => {
+    const workingList = tasks.filter((task) => {
+      return (task.status === '作業中')
+    });
+    for (let i = 0; i < workingList.length; i++) {
+      document.getElementById('workingStatus').remove();
     }
   }
 }

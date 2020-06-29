@@ -1,0 +1,15 @@
+.working {
+  display: table-row;
+}
+
+.workingNow {
+  display: none;
+}
+
+.complete {
+  display: table-row;
+}
+
+.completeNow {
+  display: none;
+}
