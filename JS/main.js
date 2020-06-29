@@ -15,19 +15,6 @@
       addTask();
     }
   });
-  // ラジオボタン
-  //すべて
-  allBtn.addEventListener('click', () => {
-    all();
-  });
-  //作業中
-  workingBtn.addEventListener('click', () => {
-    working();
-  });
-  //完了
-  completeBtn.addEventListener('click', () => {
-    complete();
-  });
   // ↓関数定義↓
   // タスク追加時の処理内容
   const addTask = () => {
@@ -58,9 +45,9 @@
         statusTd.appendChild(statusBtn);
         removeTd.appendChild(removeBtn);
         if (tasks[index].status === '作業中') {
-          tr.className = 'working';
+          tr.id = 'workingStatus';
         } else {
-          tr.className = 'complete';
+          tr.id = 'completeStatus';
         }
         tasks[index].idNumber = index;
         idTd.textContent = task.idNumber;
@@ -77,8 +64,21 @@
           statusNow(index);
           createTask();
         });
-        // ラジオボタン(すべて)にチェックを入れる
-        allBtn.checked = true;
+        // ラジオボタン
+        //すべて
+        allBtn.addEventListener('click', () => {
+          createTask();
+        });
+        //作業中
+        workingBtn.addEventListener('click', () => {
+          createTask();
+          workingRadio();
+        });
+        //完了
+        completeBtn.addEventListener('click', () => {
+          createTask();
+          completeRadio();
+        });   
       });
     };
     createTask();
@@ -98,37 +98,23 @@
       tasks[index].status = '作業中';
     }
   }
-  //ラジオボタン(すべて)を選択した時の処理内容
-  const all = () => {
-    const workingTr = document.getElementsByClassName('working');
-    for (let i = 0; i < workingTr.length; i++) {
-      workingTr[i].classList.remove('workingNow');
-    }
-    const completeTr = document.getElementsByClassName('complete');
-    for (let i = 0; i < completeTr.length; i++) {
-      completeTr[i].classList.remove('completeNow');
-    }
-  }
+  // ラジオボタン処理内容
   //ラジオボタン(作業中)を選択した時の処理内容
-  const working = () => {
-    const completeTr = document.getElementsByClassName('complete');
-    for (let i = 0; i < completeTr.length; i++) {
-      completeTr[i].classList.add('completeNow');
-    }
-    const workingTr = document.getElementsByClassName('working');
-    for (let i = 0; i < workingTr.length; i++) {
-      workingTr[i].classList.remove('workingNow');
+  const workingRadio = () => {
+    const completeList = tasks.filter((task) => {
+      return (task.status === '完了')
+    });
+    for (let i = 0; i < completeList.length; i++) {
+      document.getElementById('completeStatus').remove();
     }
   }
   //ラジオボタン(完了)を選択した時の処理内容
-  const complete = () => {
-    const workingTr = document.getElementsByClassName('working');
-    for (let i = 0; i < workingTr.length; i++) {
-      workingTr[i].classList.add('workingNow');
-    }
-    const completeTr = document.getElementsByClassName('complete');
-    for (let i = 0; i < completeTr.length; i++) {
-      completeTr[i].classList.remove('completeNow');
+  const completeRadio = () => {
+    const workingList = tasks.filter((task) => {
+      return (task.status === '作業中')
+    });
+    for (let i = 0; i < workingList.length; i++) {
+      document.getElementById('workingStatus').remove();
     }
   }
 }
